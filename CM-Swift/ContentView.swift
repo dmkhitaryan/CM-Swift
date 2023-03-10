@@ -8,41 +8,72 @@
 import SwiftUI
 
 struct CardView: View {
-    let number: Int
-    
     var body: some View {
-        Text("\(number)")
-            .font(.title)
-            .fontWeight(.bold)
-            .foregroundColor(.white)
-            .frame(width: 50, height: 80)
-            .background(Color.blue)
+        // your card view code here
+        Text("This is a card")
+            .padding()
+            .background(.white)
             .cornerRadius(10)
+            .border(.red, width: 4)
     }
 }
 
-struct TheMindView: View {
-    let deck: [Int]
+struct LifeView: View {
+    var body: some View {
+        Text("❤️")
+    }
+}
+struct Player {
+    let name: String
+    let cards: [CardView]
+}
+
+
+struct ContentView: View {
+    let players = [        Player(name: "Player 1", cards: [CardView(), CardView(), CardView()]),
+                           Player(name: "Player 2", cards: [CardView(), CardView()]),
+                           Player(name: "Player 3", cards: [CardView(), CardView(), CardView(), CardView(),CardView(), CardView(), CardView(), CardView()]),
+                           Player(name: "Player 4", cards: [CardView(), CardView()])
+    ]
+    let lives = [LifeView(), LifeView(), LifeView()]
     
     var body: some View {
         VStack {
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 40))]) {
-                ForEach(deck, id: \.self) { number in
-                    CardView(number: number).aspectRatio(2/3, contentMode: .fit)
+            HStack {
+                Spacer()
+                ForEach(lives.indices, id: \.self) { life_index in
+                    let life = lives[life_index]
+                    if(life_index == lives.indices.last) {
+                        life.padding([.trailing], 10)
+                    }
+                    else {
+                        life
+                    }
                 }
-            }.padding(.horizontal)
+            }.padding([.vertical], 15)
+            HStack{
+                ForEach(players.indices, id: \.self) { index in
+                    let player = players[index]
+                    VStack{
+                        Text(player.name)
+                        ZStack {
+                            ForEach(player.cards.indices, id: \.self) { idx in
+                                let card = player.cards[idx]
+                                card.offset(y: CGFloat(7*idx))
+                            }
+                            
+                        }
+                    }
+                }
+            }
             Spacer()
+            CardView()
+            Spacer()
+            CardView()
         }
     }
 }
 
-struct ContentView: View {
-    let deck: [Int] = Array(1...10).shuffled()
-    
-    var body: some View {
-        TheMindView(deck: deck)
-    }
-}
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
