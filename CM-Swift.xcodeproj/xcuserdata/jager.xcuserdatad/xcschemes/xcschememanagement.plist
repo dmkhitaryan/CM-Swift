@@ -6,8 +6,28 @@
 	<dict>
 		<key>CM-Swift.xcscheme_^#shared#^_</key>
 		<dict>
+			<key>isShown</key>
+			<true/>
 			<key>orderHint</key>
 			<integer>0</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>02BD82CF29B3F30A0049B773</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>02BD82E029B3F30B0049B773</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>02BD82EA29B3F30B0049B773</key>
+		<dict>
+			<key>primary</key>
+			<true/>
 		</dict>
 	</dict>
 </dict>
