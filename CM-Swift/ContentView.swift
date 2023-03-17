@@ -10,8 +10,8 @@ import SwiftUI
 struct CardView: View {
     var body: some View {
         // your card view code here
-        Text("This is a card")
-            .padding()
+        Rectangle()
+            .frame(width:80, height:85)
             .background(.white)
             .cornerRadius(10)
             .border(.red, width: 4)
@@ -28,9 +28,26 @@ struct Player {
     let cards: [CardView]
 }
 
+struct PileView: View {
+    var body: some View {
+        Rectangle()
+            .frame(width: 100, height: 90)
+            .foregroundColor(.blue)
+    }
+}
 
+struct PlayerHandView: View {
+    var body: some View {
+        Text("hello!")
+            .font(.largeTitle)
+            .padding()
+            .background(.white)
+            .cornerRadius(20)
+            .border(.red, width: 4)
+    }
+}
 struct ContentView: View {
-    let players = [        Player(name: "Player 1", cards: [CardView(), CardView(), CardView()]),
+    let players = [
                            Player(name: "Player 2", cards: [CardView(), CardView()]),
                            Player(name: "Player 3", cards: [CardView(), CardView(), CardView(), CardView(),CardView(), CardView(), CardView(), CardView()]),
                            Player(name: "Player 4", cards: [CardView(), CardView()])
@@ -39,18 +56,6 @@ struct ContentView: View {
     
     var body: some View {
         VStack {
-            HStack {
-                Spacer()
-                ForEach(lives.indices, id: \.self) { life_index in
-                    let life = lives[life_index]
-                    if(life_index == lives.indices.last) {
-                        life.padding([.trailing], 10)
-                    }
-                    else {
-                        life
-                    }
-                }
-            }.padding([.vertical], 15)
             HStack{
                 ForEach(players.indices, id: \.self) { index in
                     let player = players[index]
@@ -67,9 +72,17 @@ struct ContentView: View {
                 }
             }
             Spacer()
-            CardView()
+            PileView()
             Spacer()
-            CardView()
+            HStack{
+                PlayerHandView()
+                    .padding(.leading, 55)
+                    .onTapGesture {
+                        print("Hello!")
+                    }
+                LifeView()
+                    .padding()
+            }
         }
     }
 }
