@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		02522BAC29C47EB600BA7153 /* ACT-R in Resources */ = {isa = PBXBuildFile; fileRef = 02522BAB29C47EB600BA7153 /* ACT-R */; };
 		02BD82D429B3F30A0049B773 /* CM_SwiftApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02BD82D329B3F30A0049B773 /* CM_SwiftApp.swift */; };
 		02BD82D629B3F30A0049B773 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02BD82D529B3F30A0049B773 /* ContentView.swift */; };
 		02BD82D829B3F30B0049B773 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 02BD82D729B3F30B0049B773 /* Assets.xcassets */; };
@@ -36,6 +37,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		02522BAB29C47EB600BA7153 /* ACT-R */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "ACT-R"; sourceTree = "<group>"; };
 		02BD82D029B3F30A0049B773 /* CM-Swift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CM-Swift.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		02BD82D329B3F30A0049B773 /* CM_SwiftApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CM_SwiftApp.swift; sourceTree = "<group>"; };
 		02BD82D529B3F30A0049B773 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -103,6 +105,7 @@
 				02BD82FE29B3F5EA0049B773 /* Model.swift */,
 				02BD82D329B3F30A0049B773 /* CM_SwiftApp.swift */,
 				02BD82D529B3F30A0049B773 /* ContentView.swift */,
+				02522BAB29C47EB600BA7153 /* ACT-R */,
 				02BD82D729B3F30B0049B773 /* Assets.xcassets */,
 				02BD82D929B3F30B0049B773 /* CM_Swift.entitlements */,
 				02BD82DA29B3F30B0049B773 /* Preview Content */,
@@ -239,6 +242,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				02522BAC29C47EB600BA7153 /* ACT-R in Resources */,
 				02BD82DC29B3F30B0049B773 /* Preview Assets.xcassets in Resources */,
 				02BD82D829B3F30B0049B773 /* Assets.xcassets in Resources */,
 			);

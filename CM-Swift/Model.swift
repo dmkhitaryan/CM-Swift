@@ -6,3 +6,9 @@
 //
 
 import Foundation
+
+struct MindModel {
+    internal var model = Model()
+    
+    
+}
