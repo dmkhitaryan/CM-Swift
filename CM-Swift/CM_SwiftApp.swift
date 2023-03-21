@@ -12,7 +12,7 @@ struct CM_SwiftApp: App {
     let mind_game = MindViewModel()
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(viewModel: mind_game)
         }
     }
 }

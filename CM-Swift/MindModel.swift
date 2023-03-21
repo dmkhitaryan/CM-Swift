@@ -9,8 +9,15 @@ import Foundation
 
 struct MindModel {
     internal var model = Model()
+    var card_arr: Array<Int>?
     
-    mutating func run() {
+    mutating func run(playerName: String, cards: Array<Int>) {
+        if cards != nil {
+            card_arr = cards
+        }
+        else {
+            let _ = print("Card_arr is nil!")
+        }
         if model.buffers["goal"] == nil {
             let chunk = Chunk(s: model.generateName(string: "goal"), m: model)
             chunk.setSlot(slot: "isa", value: "goal")
@@ -33,13 +40,16 @@ struct MindModel {
                 memory.setSlot(slot: "difference", value: abs_diff)
                 memory.setSlot(slot: "timing", value: log(abs_diff)/log(1.3)+Double.random(in: 3..<6))
                 model.dm.addToDM(memory)
-                
+                    
                 goal.setSlot(slot: "state", value: "wait")
             }
-            let _ = print(model.dm)
             let _ = print(model.dm.chunks)
         default: let _ = 10;
         }
         
     }
+    mutating func play_card() {
+        card_arr!.removeFirst()
+    }
+
 }

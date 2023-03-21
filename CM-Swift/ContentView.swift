@@ -47,6 +47,7 @@ struct PlayerHandView: View {
     }
 }
 struct ContentView: View {
+    var viewModel: MindViewModel
     let players = [
                            Player(name: "Player 2", cards: [CardView(), CardView()]),
                            Player(name: "Player 3", cards: [CardView(), CardView(), CardView(), CardView(),CardView(), CardView(), CardView(), CardView()]),
@@ -90,7 +91,8 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        let mind_game = MindViewModel()
+        ContentView(viewModel: mind_game)
     }
 }
 
