@@ -51,5 +51,19 @@ struct MindModel {
     mutating func play_card() {
         card_arr!.removeFirst()
     }
-
+    mutating func add_request_memory(delta: Double, delta_card: Double) -> (Double, Chunk?) {
+        let memory_id = Int.random(in: 1..<100000)
+        let memory = Chunk(s: "memory\(memory_id)", m: model)
+        memory.setSlot(slot: "isa", value: "card-memory")
+        memory.setSlot(slot: "difference", value: delta_card)
+        memory.setSlot(slot: "timing", value: delta)
+        model.dm.addToDM(memory)
+        
+        // Retrieve timing for the model
+        let retrieval = Chunk(s: "retrieval", m: model)
+        retrieval.setSlot(slot: "isa", value: "card-memory")
+        retrieval.setSlot(slot: "difference", value: delta_card)
+        let (latency, result) = model.dm.blendedRetrieve(chunk: retrieval)
+        return (latency, result)
+    }
 }
