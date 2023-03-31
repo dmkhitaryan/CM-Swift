@@ -23,6 +23,12 @@ struct LifeView: View {
         Text("❤️")
     }
 }
+struct LevelView: View {
+    var level_number: Int
+    var body: some View {
+        Text("Level \(level_number)")
+    }
+}
 struct Player {
     let name: String
     let cards: [CardView]
@@ -47,7 +53,7 @@ struct PlayerHandView: View {
     }
 }
 struct ContentView: View {
-    var viewModel: MindViewModel
+    @ObservedObject var viewModel: MindViewModel
     let players = [
                            Player(name: "Player 2", cards: [CardView(), CardView()]),
                            Player(name: "Player 3", cards: [CardView(), CardView(), CardView(), CardView(),CardView(), CardView(), CardView(), CardView()]),
@@ -79,10 +85,11 @@ struct ContentView: View {
                 PlayerHandView()
                     .padding(.leading, 55)
                     .onTapGesture {
-                        print("Hello!")
+                        viewModel.play_card(player: "Player 1")
                     }
                 LifeView()
                     .padding()
+                LevelView(level_number: viewModel.level)
             }
         }
     }
@@ -96,4 +103,7 @@ struct ContentView_Previews: PreviewProvider {
     }
 }
 
-
+// TODO: add a view for main screen and transitions to game view.
+// TODO: replacing skeleton icons with the proper ones, adjust spaces if necessary.
+// TODO: add functionality to the buttons, e.g., player tapping on their icons triggers their move.
+// TODO: add animations.

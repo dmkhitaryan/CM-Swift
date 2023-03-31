@@ -276,10 +276,7 @@ class Declarative: Codable  {
                         let slotmismatch = mismatchFunction(val1, value)
                         if slotmismatch != nil {
                             mismatch += slotmismatch! * misMatchPenalty
-                        } else
-                        {
-                            continue chunkloop
-                        }
+                        } else { continue chunkloop }
                     }
                 } else { continue chunkloop }
             }

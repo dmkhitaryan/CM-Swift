@@ -38,12 +38,12 @@ struct MindModel {
                 let memory = Chunk(s: "memory\(n)", m: model)
                 memory.setSlot(slot: "isa", value: "card-memory")
                 memory.setSlot(slot: "difference", value: abs_diff)
-                memory.setSlot(slot: "timing", value: log(abs_diff)/log(1.3)+Double.random(in: 3..<6))
+                memory.setSlot(slot: "timing", value: Double(log(abs_diff)/log(1.3))+Double.random(in: 3..<6))
                 model.dm.addToDM(memory)
                     
                 goal.setSlot(slot: "state", value: "wait")
             }
-            let _ = print(model.dm.chunks)
+            // let _ = print(model.dm.chunks)
         default: let _ = 10;
         }
         
@@ -51,19 +51,43 @@ struct MindModel {
     mutating func play_card() {
         card_arr!.removeFirst()
     }
-    mutating func add_request_memory(delta: Double, delta_card: Double) -> (Double, Chunk?) {
+    
+    mutating func deal_hand(cards: Array<Int>, level: Int, playerN: Int) {
+        card_arr! = Array(cards[playerN*level...(level*(playerN+1))-1]).sorted()
+    }
+    
+    mutating func filter_hand(cards_to_filter: Array<Int>) {
+        card_arr! = card_arr!.filter{!cards_to_filter.contains($0)}
+    }
+    
+    func mismatch(x: Value, y: Value) -> Double? {
+        if (x.number() == nil || y.number() == nil) {
+           return nil
+        }
+        else if x == y {
+            return 0
+        }
+        else {
+            let dif = -abs(x.number()! - y.number()!) / 25
+            return max(-1, dif)
+            }
+        }
+    
+    mutating func add_request_memory(delta_timer: Double, delta_card: Double) -> (Double, Chunk?) {
         let memory_id = Int.random(in: 1..<100000)
-        let memory = Chunk(s: "memory\(memory_id)", m: model)
+        var memory = Chunk(s: "memory\(memory_id)", m: model)
         memory.setSlot(slot: "isa", value: "card-memory")
         memory.setSlot(slot: "difference", value: delta_card)
-        memory.setSlot(slot: "timing", value: delta)
+        memory.setSlot(slot: "timing", value: delta_timer)
         model.dm.addToDM(memory)
+        //print("The following memory was added to DM: \(memory)")
         
+        model.time += 0.05
         // Retrieve timing for the model
-        let retrieval = Chunk(s: "retrieval", m: model)
+        var retrieval = Chunk(s: "retrieval", m: model)
         retrieval.setSlot(slot: "isa", value: "card-memory")
         retrieval.setSlot(slot: "difference", value: delta_card)
-        let (latency, result) = model.dm.blendedRetrieve(chunk: retrieval)
-        return (latency, result)
+        let (latency, result) = model.dm.blendedPartialRetrieve(chunk: retrieval, mismatchFunction: mismatch)
+        return (latency+0.1, result) // 0.1 represents waiting 50ms for adding and requesting memory.
     }
 }
