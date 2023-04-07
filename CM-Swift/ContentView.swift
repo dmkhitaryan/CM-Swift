@@ -7,89 +7,173 @@
 
 import SwiftUI
 
-struct CardView: View {
+struct CardBack: View {
+    let width_size: CGFloat
+    let height_size: CGFloat
     var body: some View {
-        // your card view code here
-        Rectangle()
-            .frame(width:80, height:85)
-            .background(.white)
-            .cornerRadius(10)
-            .border(.red, width: 4)
+        Image("Cardback")
+             .resizable()
+             .frame(width: width_size, height: height_size)
+             .cornerRadius(10)
+             .overlay(RoundedRectangle(cornerRadius: 10)
+             .stroke(Color.orange, lineWidth: 1))
+     }
+}
+
+struct CardView: View {
+    let value: Int
+    var isOwn: Bool
+    let width_size: CGFloat
+    let height_size: CGFloat
+    var body: some View {
+        if isOwn == true  {
+           Image("\(value)")
+                .resizable()
+                .frame(width:width_size, height: height_size)
+                .cornerRadius(10)
+                .overlay(RoundedRectangle(cornerRadius: 10)
+                .stroke(Color.orange, lineWidth: 1))
+        }
+        else {
+           CardBack(width_size: 80, height_size: 130)
+        }
+    }
+}
+
+struct FakeCardView: View {
+    var body: some View {
+        CardBack(width_size: 80, height_size: 130)
+        .opacity(0.0001)
     }
 }
 
 struct LifeView: View {
+    var number_of_lives: Int
     var body: some View {
-        Text("❤️")
+        switch(number_of_lives) {
+        case 0:
+            Text("💔")
+                .font(.largeTitle)
+            GameOverView()
+        case 1:
+            Text("❤️")
+                .font(.largeTitle)
+        case 2:
+            Text("💛")
+                .font(.largeTitle)
+        case 3:
+            Text("💚")
+                .font(.largeTitle)
+        default:
+            Text("💚")
+                .font(.largeTitle)
+        }
     }
 }
+
 struct LevelView: View {
     var level_number: Int
     var body: some View {
         Text("Level \(level_number)")
+            .foregroundColor(.white)
     }
 }
-struct Player {
+struct Player: View {
     let name: String
-    let cards: [CardView]
+    let cards: Array<Int>
+    var body: some View {
+        VStack {
+            Text(name)
+                .foregroundColor(.white)
+            ZStack {
+                FakeCardView()
+                ForEach(cards.indices, id: \.self) { idx in
+                    let card = CardView(value: cards[idx], isOwn: false, width_size: 80, height_size: 130)
+                    card.offset(y: CGFloat(7*idx))
+                }
+                
+                
+            }
+        }
+    }
 }
 
-struct PileView: View {
+struct PlayersView: View {
+    var number_of_players: Int
+    @ObservedObject var viewModel: MindViewModel
+    
     var body: some View {
-        Rectangle()
-            .frame(width: 100, height: 90)
-            .foregroundColor(.blue)
+        HStack {
+            if number_of_players >= 2 {
+                Player(name: "Model 1", cards: viewModel.model1_cards)
+            }
+            
+            if number_of_players >= 3 {
+                Player(name: "Model 2", cards: viewModel.model2_cards)
+            }
+            
+            if number_of_players >= 4 {
+                Player(name: "Model 3", cards: viewModel.model3_cards)
+            }
+        }
+    }
+}
+struct PileView: View {
+    var cards: Array<Int>
+    var body: some View {
+        ZStack {
+            if (cards.isEmpty || cards.last! == 0) {
+                FakeCardView()
+                    .frame(width: 90, height: 150)
+            }
+            else {
+                CardView(value: cards.last!, isOwn: true, width_size: 90, height_size: 150)
+                    .frame(width: 90, height: 150)
+            }
+        }
     }
 }
 
 struct PlayerHandView: View {
+    var cards: Array<Int>
     var body: some View {
-        Text("hello!")
-            .font(.largeTitle)
-            .padding()
-            .background(.white)
-            .cornerRadius(20)
-            .border(.red, width: 4)
-    }
-}
-struct ContentView: View {
-    @ObservedObject var viewModel: MindViewModel
-    let players = [
-                           Player(name: "Player 2", cards: [CardView(), CardView()]),
-                           Player(name: "Player 3", cards: [CardView(), CardView(), CardView(), CardView(),CardView(), CardView(), CardView(), CardView()]),
-                           Player(name: "Player 4", cards: [CardView(), CardView()])
-    ]
-    let lives = [LifeView(), LifeView(), LifeView()]
-    
-    var body: some View {
-        VStack {
-            HStack{
-                ForEach(players.indices, id: \.self) { index in
-                    let player = players[index]
-                    VStack{
-                        Text(player.name)
-                        ZStack {
-                            ForEach(player.cards.indices, id: \.self) { idx in
-                                let card = player.cards[idx]
-                                card.offset(y: CGFloat(7*idx))
-                            }
-                            
-                        }
-                    }
+        if (cards.isEmpty) {
+            FakeCardView()
+        }
+        else {
+            ZStack {
+                ForEach(cards.indices.reversed(), id: \.self) { idx in
+                    let card = CardView(value: cards[idx], isOwn: true, width_size: 80, height_size: 130)
+                    card.offset(y: CGFloat(7*idx))
                 }
             }
-            Spacer()
-            PileView()
-            Spacer()
-            HStack{
-                PlayerHandView()
-                    .padding(.leading, 55)
-                    .onTapGesture {
-                        viewModel.play_card(player: "Player 1")
-                    }
-                LifeView()
-                    .padding()
-                LevelView(level_number: viewModel.level)
+        }
+    }
+}
+
+struct ContentView: View {
+    @ObservedObject var viewModel: MindViewModel
+    
+    var body: some View {
+        ZStack {
+            Background()
+            VStack {
+                PlayersView(number_of_players: viewModel.number_of_players, viewModel: viewModel)
+                Spacer()
+                PileView(cards: viewModel.cards_pile)
+                Spacer()
+                HStack{
+                    PlayerHandView(cards: viewModel.player_cards)
+                        .padding(.leading, 55)
+                        .onTapGesture {
+                            if !(viewModel.player_cards.isEmpty) {
+                                viewModel.play_card(player: "Player 1")
+                            }
+                        }
+                    LifeView(number_of_lives: viewModel.life_counter)
+                        .padding()
+                    LevelView(level_number: viewModel.level)
+                }
             }
         }
     }

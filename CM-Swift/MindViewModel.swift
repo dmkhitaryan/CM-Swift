@@ -8,14 +8,16 @@
 import Foundation
 
 class MindViewModel: ObservableObject {
-    var number_of_players: Int = 3
-    var level: Int = 3
-    var life_counter = 3
-    var player_cards: Array<Int> = []
-    var cards_pile: Array<Int> = [0]
-    var model1_cards: Array<Int> = []
-    var model2_cards: Array<Int> = []
-    var model3_cards: Array<Int> = []
+    var number_of_players: Int = 4
+    @Published var isGameOver: Bool = false
+    @Published var isGameComplete: Bool = false
+    @Published var level: Int = 1
+    @Published var life_counter = 999
+    @Published var player_cards: Array<Int> = []
+    @Published var cards_pile: Array<Int> = [0]
+    @Published var model1_cards: Array<Int> = []
+    @Published var model2_cards: Array<Int> = []
+    @Published var model3_cards: Array<Int> = []
     var model1: MindModel?
     var model2: MindModel?
     var model3: MindModel?
@@ -24,26 +26,41 @@ class MindViewModel: ObservableObject {
     
     init() {
         var players = (1...number_of_players).map{"Player \($0)"}
-        var cards = Array(1...100).shuffled()
+        let cards = Array(1...100).shuffled()
+        var init_delta_card: Double = 0.0
         
         if number_of_players >= 2 {
-            player_cards = Array(cards[0...level-1]).sorted()
-            model1_cards = Array(cards[level...level*2-1]).sorted()
-            model1 = MindModel()
-            model1!.run(playerName: players[1], cards: model1_cards)
+            self.player_cards = Array(cards[0...level-1]).sorted()
+            self.model1_cards = Array(cards[level...level*2-1]).sorted()
+            self.model1 = MindModel()
+            self.model1!.run(playerName: players[1], cards: model1_cards)
+            
+            init_delta_card = Double(abs(0-model1_cards.first!))
         }
         
         if number_of_players >= 3 {
-            model2_cards = Array(cards[level*2...level*3-1]).sorted()
-            model2 = MindModel()
-            model2!.run(playerName: players[2], cards: model2_cards)
+            self.model2_cards = Array(cards[level*2...level*3-1]).sorted()
+            self.model2 = MindModel()
+            self.model2!.run(playerName: players[2], cards: model2_cards)
+            
+            init_delta_card = Double(abs(0-model2_cards.first!))
         }
         
         if number_of_players >= 4 {
-            model3_cards = Array(cards[level*3...level*4-1]).sorted()
-            model3 = MindModel()
-            model3!.run(playerName: players[3], cards: model3_cards)
+            self.model3_cards = Array(cards[level*3...level*4-1]).sorted()
+            self.model3 = MindModel()
+            self.model3!.run(playerName: players[3], cards: model3_cards)
+            
+            init_delta_card = Double(abs(0-model3_cards.first!))
         }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [self] in
+            // Put your code which should be executed with a delay here
+            let (init_fastest_model, init_fastest_timing) = memory_game_logic(number_of_players: number_of_players, delta_card: init_delta_card, delta_timer: 0, first_memory: true)
+            self.model_timer = Timer.scheduledTimer(withTimeInterval: init_fastest_timing, repeats: false) {_ in
+                self.play_card(player: init_fastest_model)
+            }
+        }
+        
     }
     
     func play_card(player: String) {
@@ -95,27 +112,124 @@ class MindViewModel: ObservableObject {
         print("The played card is \(played_card)")
         print("The last card in the pile is \(prev_card ?? 999)")
         print("Player 1 has these cards: \(player_cards)")
-        print("Player 2 has these cards: \(model1!.card_arr)")
-        print("Player 3 has these cards: \(model2!.card_arr)")
+        print("Player 2 has these cards: \(model1!.card_arr ?? [646])")
+        print("Player 3 has these cards: \(model2!.card_arr ?? [646])")
         
         
         let current_card = played_card
         let delta_card = Double(abs(current_card - prev_card!))
         
-//        var model_timers: Array<Double> = []
-        
-        
+        if number_of_players >= 2 {
+            lower_cards1 = player_cards.enumerated().compactMap {$1 < played_card ? $1 : nil}
+            lower_cards2 = model1_cards.enumerated().compactMap {$1 < played_card ? $1 : nil}
+        }
+        if number_of_players >= 3 {
+            lower_cards3 = model2_cards.enumerated().compactMap {$1 < played_card ? $1 : nil}
+        }
+        if number_of_players >= 4 {
+            lower_cards4 = model3_cards.enumerated().compactMap {$1 < played_card ? $1 : nil}
+        }
+        if !(lower_cards1.isEmpty && lower_cards2.isEmpty && lower_cards3.isEmpty && lower_cards4.isEmpty) {
+            // TODO: filtering returns indices of wrong elements, not the wrong elements themselves.
+            // TODO: running .filter() removes EVERYTHING from both models.
+            print("Someone played the wrong card!")
+            if (life_counter > 0) {
+                life_counter -= 1
+                if number_of_players >= 2 {
+                    print("Show the wrong cards for Player 1: \(lower_cards1)")
+                    print("Show the wrong cards for Player 2: \(lower_cards2)")
+                    
+                    
+                    print("Player 1 cards before filtering: \(player_cards)")
+                    print("Player 2 cards before filtering: \(model1_cards)")
+                    player_cards = player_cards.filter{!lower_cards1.contains($0)}
+                    model1_cards = model1_cards.filter{!lower_cards2.contains($0)}
+                    model1!.filter_hand(cards_to_filter: lower_cards2)
+                    
+                    print("Player 1 cards after filtering: \(player_cards)")
+                    print("Player 2 cards after filtering: \(model1_cards)")
+                    
+                }
+                if number_of_players >= 3 {
+                    print("Show the wrong cards for Player 3: \(lower_cards3)")
+                    print("Player 3 cards before filtering: \(model2_cards)")
+                    model2_cards = model2_cards.filter{!lower_cards3.contains($0)}
+                    model2!.filter_hand(cards_to_filter: lower_cards3)
+                    print("Player 3 cards after filtering: \(model2_cards)")
+                }
+                if number_of_players >= 4 {
+                    model3_cards = model3_cards.filter{!lower_cards4.contains($0)}
+                    model3!.filter_hand(cards_to_filter: lower_cards4)
+                }
+            }
+            else {
+                // say game over.
+                // TODO: define what is 'Game Over'.
+                print("Game over, you ran out lives!")
+                isGameOver = true
+                if let check = model_timer {
+                    model_timer!.invalidate()
+                }
+            }
+        }
         // Initialize some variables used to keep track of timing
+        
+        // TODO: Implement partial blended retrieval!!
+        var (fastest_model, fastest_timing) = memory_game_logic(number_of_players: number_of_players, delta_card: delta_card, delta_timer: delta_timer, first_memory: false)
+        
+        // if all hands empty -> advance next level, else the timer block.
+        if (player_cards.isEmpty && model1_cards.isEmpty && model2_cards.isEmpty && model3_cards.isEmpty) {
+            print("Everyone emptied their hands, on to next level!")
+            // newLevel()
+            if (level < 16 - number_of_players*2) {
+                level += 1
+                cards_pile = [0]
+                let cards = Array(1...100).shuffled()
+                
+                player_cards = Array(cards[0...level-1]).sorted()
+                model1_cards = Array(cards[level...level*2-1]).sorted()
+                model1!.deal_hand(cards: cards, level: level, playerN: 1)
+                
+                if number_of_players >= 3 {
+                    model2_cards = Array(cards[level*2...level*3-1]).sorted()
+                    model2!.deal_hand(cards: cards, level: level, playerN: 2)
+                }
+                if number_of_players >= 4 {
+                    model3_cards = Array(cards[level*3...level*4-1]).sorted()
+                    model3!.deal_hand(cards: cards, level: level, playerN: 3)
+                }
+                
+                (fastest_model, fastest_timing) = memory_game_logic(number_of_players: number_of_players, delta_card: delta_card, delta_timer: delta_timer, first_memory: true)
+                print("New round, first move. The time to wait is \(fastest_timing) seconds!")
+                print("This will be done by the \(fastest_model)")
+                model_timer = Timer.scheduledTimer(withTimeInterval: fastest_timing, repeats: false) {_ in
+                    self.play_card(player: fastest_model)
+                }
+            }
+            else {
+                print("You finished the game!")
+                isGameComplete = true
+            }
+        }
+        else if (!model1_cards.isEmpty || !model2_cards.isEmpty || !model3_cards.isEmpty) {
+            print("The time to wait is \(fastest_timing) seconds!")
+            print("This will be done by the \(fastest_model)")
+            model_timer = Timer.scheduledTimer(withTimeInterval: fastest_timing, repeats: false) {_ in
+                self.play_card(player: fastest_model)
+            }
+        }
+        
+    }
+    
+    func memory_game_logic(number_of_players: Int, delta_card: Double, delta_timer: Double, first_memory: Bool) -> (String, Double) {
         var m1_timing = 0.0
         var m2_timing = 0.0
         var m3_timing = 0.0
-        var fastest_timing: Double = inf
+        var fastest_timing: Double = 99999
         var fastest_model = "Player 2"
-        
-        // TODO: Implement partial blended retrieval!!
         if number_of_players >= 2 {
             // Do for model 1
-            let (latency1, result1) = model1!.add_request_memory(delta_timer: delta_timer, delta_card: delta_card)
+            let (latency1, result1) = model1!.add_request_memory(delta_timer: delta_timer, delta_card: delta_card, first_memory: false)
             
             if (result1 != nil) {
                // print("Good! Latency is \(latency1), chunk is \(result1)")
@@ -132,13 +246,12 @@ class MindViewModel: ObservableObject {
                 fastest_timing  = m1_timing + latency1
             }
             print("The timer for model 1 is \(fastest_timing)")
-            lower_cards1 = player_cards.enumerated().compactMap {$1 < played_card ? $1 : nil}
-            lower_cards2 = model1_cards.enumerated().compactMap {$1 < played_card ? $1 : nil}
+            
         }
         
         if number_of_players >= 3 {
             // Do for model 2
-            let (latency2, result2) = model2!.add_request_memory(delta_timer: delta_timer, delta_card: delta_card)
+            let (latency2, result2) = model2!.add_request_memory(delta_timer: delta_timer, delta_card: delta_card, first_memory: false)
             
             if (result2 != nil) {
                 m2_timing = Double(result2!.slotvals["timing"]!.number() ?? Double.random(in: 0..<0.25)*delta_card)
@@ -147,14 +260,14 @@ class MindViewModel: ObservableObject {
                 m2_timing = Double.random(in: 0..<0.25)*delta_card
             }
             
-            if m2_timing + latency2 < fastest_timing && !(model3_cards.isEmpty) {
+            if m2_timing + latency2 < fastest_timing && !(model2_cards.isEmpty) {
                 fastest_model = "Player 3"
                 fastest_timing = m2_timing + latency2
             }
-            lower_cards3 = model2_cards.enumerated().compactMap {$1 < played_card ? $1 : nil}
+            
         }
         if number_of_players >= 4 {
-            let (latency3, result3) = model3!.add_request_memory(delta_timer: delta_timer, delta_card: delta_card)
+            let (latency3, result3) = model3!.add_request_memory(delta_timer: delta_timer, delta_card: delta_card, first_memory: false)
             
             if (result3 != nil) {
                 m3_timing = Double(result3!.slotvals["timing"]!.number() ?? Double.random(in: 0..<0.25)*delta_card)
@@ -167,76 +280,10 @@ class MindViewModel: ObservableObject {
                 fastest_model = "Player 4"
                 fastest_timing = m3_timing + latency3
             }
-            lower_cards4 = model3_cards.enumerated().compactMap {$1 < played_card ? $1 : nil}
         }
-
-        if !(lower_cards1.isEmpty && lower_cards2.isEmpty && lower_cards3.isEmpty && lower_cards4.isEmpty) {
-            // TODO: filtering returns indices of wrong elements, not the wrong elements themselves.
-            // TODO: running .filter() removes EVERYTHING from both models.
-            print("Someone played the wrong card!")
-            if (life_counter > 0) {
-                if number_of_players >= 2 {
-                    print("Show the wrong cards for Player 1: \(lower_cards1)")
-                    print("Show the wrong cards for Player 2: \(lower_cards2)")
-                    print("Show the wrong cards for Player 3: \(lower_cards3)")
-                    
-                    print("Player 1 cards before filtering: \(player_cards)")
-                    print("Player 2 cards before filtering: \(model1_cards)")
-                    print("Player 2 cards before filtering: \(model2_cards)")
-                    player_cards = player_cards.filter{!lower_cards1.contains($0)}
-                    model1_cards = model1_cards.filter{!lower_cards2.contains($0)}
-                    model1!.filter_hand(cards_to_filter: lower_cards2)
-                    
-                    print("Player 1 cards after filtering: \(player_cards)")
-                    print("Player 2 cards after filtering: \(model1_cards)")
-                    print("Player 3 cards after filtering: \(model2_cards)")
-                    
-                }
-                if number_of_players >= 3 {
-                    model2_cards = model2_cards.filter{!lower_cards3.contains($0)}
-                    model2!.filter_hand(cards_to_filter: lower_cards3)
-                }
-                if number_of_players >= 4 {
-                    model3_cards = model3_cards.filter{!lower_cards4.contains($0)}
-                    model3!.filter_hand(cards_to_filter: lower_cards4)
-                }
-                life_counter -= 1
-            }
-            else {
-                // say game over.
-                // TODO: define what is 'Game Over'.
-                print("Game over, you ran out lives!")
-            }
+        if (first_memory) {
+            print("First move of the round! The fastest model is \(fastest_model), their time before playing is \(fastest_timing)")
         }
-        // if all hands empty -> advance next level, else the timer block.
-        if (player_cards.isEmpty && model1_cards.isEmpty && model2_cards.isEmpty && model3_cards.isEmpty) {
-            print("Everyone emptied their hands, on to next level!")
-            // newLevel()
-            level += 1
-            let players = (1...number_of_players).map{"Player \($0)"}
-            var cards = Array(1...100).shuffled()
-            player_cards = Array(cards[0...level-1]).sorted()
-            model1_cards = Array(cards[level...level*2-1]).sorted()
-            model1!.deal_hand(cards: cards, level: level, playerN: 1)
-            
-            if number_of_players >= 3 {
-                model2_cards = Array(cards[level*2...level*3-1]).sorted()
-                model2!.deal_hand(cards: cards, level: level, playerN: 2)
-            }
-            if number_of_players >= 4 {
-                model3_cards = Array(cards[level*3...level*4-1]).sorted()
-                model3!.deal_hand(cards: cards, level: level, playerN: 3)
-            }
-            
-        }
-        else if (!model1_cards.isEmpty || !model2_cards.isEmpty || !model3_cards.isEmpty) {
-            print("The time to wait is \(fastest_timing) seconds!")
-            model_timer = Timer.scheduledTimer(withTimeInterval: fastest_timing, repeats: false) {_ in
-                self.play_card(player: fastest_model)
-            }
-        }
-        
-        
+        return (fastest_model, fastest_timing)
     }
-    
 }

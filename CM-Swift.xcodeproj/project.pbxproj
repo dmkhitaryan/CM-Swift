@@ -22,6 +22,7 @@
 		025244AD29C4827800BA7153 /* Declarative.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0252449E29C4827800BA7153 /* Declarative.swift */; };
 		025244AE29C4827800BA7153 /* Chunk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0252449F29C4827800BA7153 /* Chunk.swift */; };
 		025244AF29C4827800BA7153 /* Production.swift in Sources */ = {isa = PBXBuildFile; fileRef = 025244A029C4827800BA7153 /* Production.swift */; };
+		02928B5829DF84650084AD34 /* GameOverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02928B5729DF84650084AD34 /* GameOverView.swift */; };
 		02BD82D429B3F30A0049B773 /* CM_SwiftApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02BD82D329B3F30A0049B773 /* CM_SwiftApp.swift */; };
 		02BD82D629B3F30A0049B773 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02BD82D529B3F30A0049B773 /* ContentView.swift */; };
 		02BD82D829B3F30B0049B773 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 02BD82D729B3F30B0049B773 /* Assets.xcassets */; };
@@ -31,6 +32,8 @@
 		02BD82F229B3F30B0049B773 /* CM_SwiftUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02BD82F129B3F30B0049B773 /* CM_SwiftUITestsLaunchTests.swift */; };
 		02BD82FF29B3F5EA0049B773 /* MindModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02BD82FE29B3F5EA0049B773 /* MindModel.swift */; };
 		02BD830129B3F5F70049B773 /* MindViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02BD830029B3F5F70049B773 /* MindViewModel.swift */; };
+		02D6EE8A29E00F7100B5B37F /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02D6EE8929E00F7100B5B37F /* SplashView.swift */; };
+		02D6EE8C29E0147300B5B37F /* MainMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02D6EE8B29E0147300B5B37F /* MainMenuView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,6 +69,7 @@
 		0252449E29C4827800BA7153 /* Declarative.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Declarative.swift; sourceTree = "<group>"; };
 		0252449F29C4827800BA7153 /* Chunk.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Chunk.swift; sourceTree = "<group>"; };
 		025244A029C4827800BA7153 /* Production.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Production.swift; sourceTree = "<group>"; };
+		02928B5729DF84650084AD34 /* GameOverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOverView.swift; sourceTree = "<group>"; };
 		02BD82D029B3F30A0049B773 /* CM-Swift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CM-Swift.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		02BD82D329B3F30A0049B773 /* CM_SwiftApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CM_SwiftApp.swift; sourceTree = "<group>"; };
 		02BD82D529B3F30A0049B773 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -79,6 +83,8 @@
 		02BD82F129B3F30B0049B773 /* CM_SwiftUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CM_SwiftUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		02BD82FE29B3F5EA0049B773 /* MindModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MindModel.swift; sourceTree = "<group>"; };
 		02BD830029B3F5F70049B773 /* MindViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MindViewModel.swift; sourceTree = "<group>"; };
+		02D6EE8929E00F7100B5B37F /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
+		02D6EE8B29E0147300B5B37F /* MainMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -151,6 +157,9 @@
 		02BD82D229B3F30A0049B773 /* CM-Swift */ = {
 			isa = PBXGroup;
 			children = (
+				02D6EE8B29E0147300B5B37F /* MainMenuView.swift */,
+				02D6EE8929E00F7100B5B37F /* SplashView.swift */,
+				02928B5729DF84650084AD34 /* GameOverView.swift */,
 				02BD830029B3F5F70049B773 /* MindViewModel.swift */,
 				02BD82FE29B3F5EA0049B773 /* MindModel.swift */,
 				02BD82D329B3F30A0049B773 /* CM_SwiftApp.swift */,
@@ -328,7 +337,9 @@
 				02BD830129B3F5F70049B773 /* MindViewModel.swift in Sources */,
 				025244A429C4827800BA7153 /* Procedural.swift in Sources */,
 				02BD82D429B3F30A0049B773 /* CM_SwiftApp.swift in Sources */,
+				02928B5829DF84650084AD34 /* GameOverView.swift in Sources */,
 				025244A129C4827800BA7153 /* SlotAction.swift in Sources */,
+				02D6EE8C29E0147300B5B37F /* MainMenuView.swift in Sources */,
 				025244A929C4827800BA7153 /* SlotCondition.swift in Sources */,
 				025244A229C4827800BA7153 /* BufferCondition.swift in Sources */,
 				025244AB29C4827800BA7153 /* Support.swift in Sources */,
@@ -337,6 +348,7 @@
 				025244AD29C4827800BA7153 /* Declarative.swift in Sources */,
 				025244AA29C4827800BA7153 /* BufferAction.swift in Sources */,
 				025244AE29C4827800BA7153 /* Chunk.swift in Sources */,
+				02D6EE8A29E00F7100B5B37F /* SplashView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

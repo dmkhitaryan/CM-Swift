@@ -9,10 +9,9 @@ import SwiftUI
 
 @main
 struct CM_SwiftApp: App {
-    let mind_game = MindViewModel()
     var body: some Scene {
         WindowGroup {
-            ContentView(viewModel: mind_game)
+            SplashView()
         }
     }
 }

@@ -73,18 +73,20 @@ struct MindModel {
             }
         }
     
-    mutating func add_request_memory(delta_timer: Double, delta_card: Double) -> (Double, Chunk?) {
-        let memory_id = Int.random(in: 1..<100000)
-        var memory = Chunk(s: "memory\(memory_id)", m: model)
-        memory.setSlot(slot: "isa", value: "card-memory")
-        memory.setSlot(slot: "difference", value: delta_card)
-        memory.setSlot(slot: "timing", value: delta_timer)
-        model.dm.addToDM(memory)
+    mutating func add_request_memory(delta_timer: Double, delta_card: Double, first_memory: Bool) -> (Double, Chunk?) {
+        if !(first_memory) {
+            let memory_id = Int.random(in: 1..<100000)
+            let memory = Chunk(s: "memory\(memory_id)", m: model)
+            memory.setSlot(slot: "isa", value: "card-memory")
+            memory.setSlot(slot: "difference", value: delta_card)
+            memory.setSlot(slot: "timing", value: delta_timer)
+            model.dm.addToDM(memory)
+        }
         //print("The following memory was added to DM: \(memory)")
         
         model.time += 0.05
         // Retrieve timing for the model
-        var retrieval = Chunk(s: "retrieval", m: model)
+        let retrieval = Chunk(s: "retrieval", m: model)
         retrieval.setSlot(slot: "isa", value: "card-memory")
         retrieval.setSlot(slot: "difference", value: delta_card)
         let (latency, result) = model.dm.blendedPartialRetrieve(chunk: retrieval, mismatchFunction: mismatch)
