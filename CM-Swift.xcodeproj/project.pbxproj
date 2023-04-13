@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0219AC3B29E6217B00616653 /* PlayerNumberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0219AC3A29E6217B00616653 /* PlayerNumberView.swift */; };
 		025244A129C4827800BA7153 /* SlotAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0252449229C4827800BA7153 /* SlotAction.swift */; };
 		025244A229C4827800BA7153 /* BufferCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0252449329C4827800BA7153 /* BufferCondition.swift */; };
 		025244A329C4827800BA7153 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0252449429C4827800BA7153 /* Model.swift */; };
@@ -22,6 +23,8 @@
 		025244AD29C4827800BA7153 /* Declarative.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0252449E29C4827800BA7153 /* Declarative.swift */; };
 		025244AE29C4827800BA7153 /* Chunk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0252449F29C4827800BA7153 /* Chunk.swift */; };
 		025244AF29C4827800BA7153 /* Production.swift in Sources */ = {isa = PBXBuildFile; fileRef = 025244A029C4827800BA7153 /* Production.swift */; };
+		02729B0429E7F23A009A0612 /* HowToPlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02729B0329E7F23A009A0612 /* HowToPlayView.swift */; };
+		02729B0629E7FF38009A0612 /* wrong2.wav in Resources */ = {isa = PBXBuildFile; fileRef = 02729B0529E7FF38009A0612 /* wrong2.wav */; };
 		02928B5829DF84650084AD34 /* GameOverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02928B5729DF84650084AD34 /* GameOverView.swift */; };
 		02BD82D429B3F30A0049B773 /* CM_SwiftApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02BD82D329B3F30A0049B773 /* CM_SwiftApp.swift */; };
 		02BD82D629B3F30A0049B773 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02BD82D529B3F30A0049B773 /* ContentView.swift */; };
@@ -34,6 +37,10 @@
 		02BD830129B3F5F70049B773 /* MindViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02BD830029B3F5F70049B773 /* MindViewModel.swift */; };
 		02D6EE8A29E00F7100B5B37F /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02D6EE8929E00F7100B5B37F /* SplashView.swift */; };
 		02D6EE8C29E0147300B5B37F /* MainMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02D6EE8B29E0147300B5B37F /* MainMenuView.swift */; };
+		02F4709F29E5D13B004121E4 /* card_played.wav in Resources */ = {isa = PBXBuildFile; fileRef = 02F4709E29E5D13B004121E4 /* card_played.wav */; };
+		02F470A229E5D39F004121E4 /* card_played2.wav in Resources */ = {isa = PBXBuildFile; fileRef = 02F470A129E5D39F004121E4 /* card_played2.wav */; };
+		02F470A429E5DBBE004121E4 /* wrong_answer.wav in Resources */ = {isa = PBXBuildFile; fileRef = 02F470A329E5DBBE004121E4 /* wrong_answer.wav */; };
+		02F470A629E60444004121E4 /* GameCompleteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F470A529E60444004121E4 /* GameCompleteView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +61,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0219AC3A29E6217B00616653 /* PlayerNumberView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerNumberView.swift; sourceTree = "<group>"; };
 		0252449229C4827800BA7153 /* SlotAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlotAction.swift; sourceTree = "<group>"; };
 		0252449329C4827800BA7153 /* BufferCondition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BufferCondition.swift; sourceTree = "<group>"; };
 		0252449429C4827800BA7153 /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
@@ -69,6 +77,8 @@
 		0252449E29C4827800BA7153 /* Declarative.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Declarative.swift; sourceTree = "<group>"; };
 		0252449F29C4827800BA7153 /* Chunk.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Chunk.swift; sourceTree = "<group>"; };
 		025244A029C4827800BA7153 /* Production.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Production.swift; sourceTree = "<group>"; };
+		02729B0329E7F23A009A0612 /* HowToPlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HowToPlayView.swift; sourceTree = "<group>"; };
+		02729B0529E7FF38009A0612 /* wrong2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = wrong2.wav; sourceTree = "<group>"; };
 		02928B5729DF84650084AD34 /* GameOverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOverView.swift; sourceTree = "<group>"; };
 		02BD82D029B3F30A0049B773 /* CM-Swift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CM-Swift.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		02BD82D329B3F30A0049B773 /* CM_SwiftApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CM_SwiftApp.swift; sourceTree = "<group>"; };
@@ -85,6 +95,10 @@
 		02BD830029B3F5F70049B773 /* MindViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MindViewModel.swift; sourceTree = "<group>"; };
 		02D6EE8929E00F7100B5B37F /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		02D6EE8B29E0147300B5B37F /* MainMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuView.swift; sourceTree = "<group>"; };
+		02F4709E29E5D13B004121E4 /* card_played.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = card_played.wav; sourceTree = "<group>"; };
+		02F470A129E5D39F004121E4 /* card_played2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = card_played2.wav; sourceTree = "<group>"; };
+		02F470A329E5DBBE004121E4 /* wrong_answer.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = wrong_answer.wav; sourceTree = "<group>"; };
+		02F470A529E60444004121E4 /* GameCompleteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameCompleteView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -157,7 +171,11 @@
 		02BD82D229B3F30A0049B773 /* CM-Swift */ = {
 			isa = PBXGroup;
 			children = (
+				02F470A029E5D38D004121E4 /* Sounds */,
+				0219AC3A29E6217B00616653 /* PlayerNumberView.swift */,
 				02D6EE8B29E0147300B5B37F /* MainMenuView.swift */,
+				02729B0329E7F23A009A0612 /* HowToPlayView.swift */,
+				02F470A529E60444004121E4 /* GameCompleteView.swift */,
 				02D6EE8929E00F7100B5B37F /* SplashView.swift */,
 				02928B5729DF84650084AD34 /* GameOverView.swift */,
 				02BD830029B3F5F70049B773 /* MindViewModel.swift */,
@@ -195,6 +213,17 @@
 				02BD82F129B3F30B0049B773 /* CM_SwiftUITestsLaunchTests.swift */,
 			);
 			path = "CM-SwiftUITests";
+			sourceTree = "<group>";
+		};
+		02F470A029E5D38D004121E4 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				02729B0529E7FF38009A0612 /* wrong2.wav */,
+				02F470A329E5DBBE004121E4 /* wrong_answer.wav */,
+				02F470A129E5D39F004121E4 /* card_played2.wav */,
+				02F4709E29E5D13B004121E4 /* card_played.wav */,
+			);
+			path = Sounds;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -301,8 +330,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				02F4709F29E5D13B004121E4 /* card_played.wav in Resources */,
+				02F470A429E5DBBE004121E4 /* wrong_answer.wav in Resources */,
 				02BD82DC29B3F30B0049B773 /* Preview Assets.xcassets in Resources */,
+				02F470A229E5D39F004121E4 /* card_played2.wav in Resources */,
 				02BD82D829B3F30B0049B773 /* Assets.xcassets in Resources */,
+				02729B0629E7FF38009A0612 /* wrong2.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -334,6 +367,7 @@
 				02BD82FF29B3F5EA0049B773 /* MindModel.swift in Sources */,
 				025244AC29C4827800BA7153 /* Parser.swift in Sources */,
 				02BD82D629B3F30A0049B773 /* ContentView.swift in Sources */,
+				02F470A629E60444004121E4 /* GameCompleteView.swift in Sources */,
 				02BD830129B3F5F70049B773 /* MindViewModel.swift in Sources */,
 				025244A429C4827800BA7153 /* Procedural.swift in Sources */,
 				02BD82D429B3F30A0049B773 /* CM_SwiftApp.swift in Sources */,
@@ -344,8 +378,10 @@
 				025244A229C4827800BA7153 /* BufferCondition.swift in Sources */,
 				025244AB29C4827800BA7153 /* Support.swift in Sources */,
 				025244A629C4827800BA7153 /* Temporal.swift in Sources */,
+				0219AC3B29E6217B00616653 /* PlayerNumberView.swift in Sources */,
 				025244A729C4827800BA7153 /* Vision.swift in Sources */,
 				025244AD29C4827800BA7153 /* Declarative.swift in Sources */,
+				02729B0429E7F23A009A0612 /* HowToPlayView.swift in Sources */,
 				025244AA29C4827800BA7153 /* BufferAction.swift in Sources */,
 				025244AE29C4827800BA7153 /* Chunk.swift in Sources */,
 				02D6EE8A29E00F7100B5B37F /* SplashView.swift in Sources */,
@@ -503,18 +539,21 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"CM-Swift/Preview Content\"";
+				DEVELOPMENT_TEAM = FL5SCL4MT3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "The Mind (Group01)";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.board-games";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
@@ -539,18 +578,21 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"CM-Swift/Preview Content\"";
+				DEVELOPMENT_TEAM = FL5SCL4MT3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "The Mind (Group01)";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.board-games";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";

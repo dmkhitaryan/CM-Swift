@@ -9,26 +9,25 @@ import SwiftUI
 
 struct MainMenuView: View {
     @State var startGame: Bool = false
-
+    
     var body: some View {
         NavigationView {
             ZStack {
                 Background()
                 VStack {
-                    if !startGame {
-                        Button("Start the Game!") {
-                            startGame.toggle()
-                        }
-                    } else {
-                        let mind_game = MindViewModel()
-                        NavigationLink(destination: ContentView(viewModel: mind_game)) {
-                            Text("Start the game")
-                        }
-                        .isDetailLink(false)
-                        .navigationBarBackButtonHidden(true)
+                    Image("SplashImage")
+                        .resizable()
+                    NavigationLink(destination: PlayerNumberView()) {
+                        Image("start_game")
+                            .resizable()
+                            .frame(width: 160, height: 100)
+                    }
+                    NavigationLink(destination: HowToPlayView()) {
+                        Image("how_to_play")
+                            .resizable()
+                            .frame(width: 160, height: 100)
                     }
                 }
-                .navigationBarTitle(Text("Main Menu"))
             }
         }
     }

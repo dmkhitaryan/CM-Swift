@@ -50,23 +50,12 @@ struct FakeCardView: View {
 struct LifeView: View {
     var number_of_lives: Int
     var body: some View {
-        switch(number_of_lives) {
-        case 0:
-            Text("💔")
-                .font(.largeTitle)
-            GameOverView()
-        case 1:
-            Text("❤️")
-                .font(.largeTitle)
-        case 2:
-            Text("💛")
-                .font(.largeTitle)
-        case 3:
-            Text("💚")
-                .font(.largeTitle)
-        default:
-            Text("💚")
-                .font(.largeTitle)
+        ZStack {
+            Image("Heart")
+                .resizable()
+                .frame(width: 60, height: 120)
+            Text("\(number_of_lives)")
+                .foregroundColor(.white)
         }
     }
 }
@@ -89,7 +78,7 @@ struct Player: View {
                 FakeCardView()
                 ForEach(cards.indices, id: \.self) { idx in
                     let card = CardView(value: cards[idx], isOwn: false, width_size: 80, height_size: 130)
-                    card.offset(y: CGFloat(7*idx))
+                    card.offset(y: CGFloat(7*idx)).animation(/*@START_MENU_TOKEN@*/.easeOut/*@END_MENU_TOKEN@*/, value: 2)
                 }
                 
                 
@@ -154,26 +143,44 @@ struct PlayerHandView: View {
 struct ContentView: View {
     @ObservedObject var viewModel: MindViewModel
     
+    init(nPlayers: Int) {
+        let soundPlayer = SoundPlayer()
+        viewModel = MindViewModel(soundPlayer: soundPlayer, n_players: nPlayers)
+    }
+    
     var body: some View {
-        ZStack {
-            Background()
-            VStack {
-                PlayersView(number_of_players: viewModel.number_of_players, viewModel: viewModel)
-                Spacer()
-                PileView(cards: viewModel.cards_pile)
-                Spacer()
-                HStack{
-                    PlayerHandView(cards: viewModel.player_cards)
-                        .padding(.leading, 55)
-                        .onTapGesture {
-                            if !(viewModel.player_cards.isEmpty) {
-                                viewModel.play_card(player: "Player 1")
+        if(!viewModel.isGameComplete || !viewModel.isGameOver) {
+            ZStack {
+                Background()
+                VStack {
+                    PlayersView(number_of_players: viewModel.number_of_players, viewModel: viewModel)
+                    Spacer()
+                    PileView(cards: viewModel.cards_pile)
+                    Spacer()
+                    HStack{
+                        PlayerHandView(cards: viewModel.player_cards)
+                            .padding(.leading, 55)
+                            .onTapGesture {
+                                withAnimation {
+                                    if !(viewModel.player_cards.isEmpty && (!viewModel.isGameOver || !viewModel.isGameComplete)) {
+                                        viewModel.play_card(player: "Player 1")
+                                    }
+                                }
                             }
-                        }
-                    LifeView(number_of_lives: viewModel.life_counter)
-                        .padding()
-                    LevelView(level_number: viewModel.level)
+                        LifeView(number_of_lives: viewModel.life_counter)
+                            .padding()
+                        LevelView(level_number: viewModel.level)
+                    }
+                    
                 }
+            }
+        }
+        else {
+            if(viewModel.isGameOver) {
+                GameOverView()
+            }
+            if(viewModel.isGameComplete) {
+                GameCompleteView()
             }
         }
     }
@@ -182,8 +189,7 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        let mind_game = MindViewModel()
-        ContentView(viewModel: mind_game)
+        ContentView(nPlayers: 4)
     }
 }
 

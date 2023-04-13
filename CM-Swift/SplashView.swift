@@ -27,8 +27,8 @@ struct SplashView: View {
         let str2 = """
         App Design by:
         David Mkhitaryam (S3415732)
-        Twan Vos ()
-        Imme Huitema ()
+        Twan Vos (S3734870)
+        Imme Huitema (S3447472)
         """
         if isActive {
             MainMenuView()

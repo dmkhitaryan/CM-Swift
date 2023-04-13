@@ -6,25 +6,59 @@
 //
 
 import Foundation
+import AVFoundation
+import Combine
+
+class SoundPlayer: ObservableObject {
+    
+    var audioPlayer: AVAudioPlayer?
+    var cancellables = Set<AnyCancellable>()
+    
+    func playSound(sounds: Array<String>) {
+        guard let sound = sounds.randomElement(),
+              let soundUrl = Bundle.main.url(forResource: sound, withExtension: "wav") else {
+            print("Error: Sound file not found")
+            return
+        }
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOf: soundUrl)
+            audioPlayer?.play()
+        } catch {
+            print("Error playing sound: \(error.localizedDescription)")
+        }
+    }
+}
+
 
 class MindViewModel: ObservableObject {
-    var number_of_players: Int = 4
+    var number_of_players: Int
     @Published var isGameOver: Bool = false
     @Published var isGameComplete: Bool = false
     @Published var level: Int = 1
-    @Published var life_counter = 999
+    @Published var life_counter: Int
     @Published var player_cards: Array<Int> = []
     @Published var cards_pile: Array<Int> = [0]
     @Published var model1_cards: Array<Int> = []
     @Published var model2_cards: Array<Int> = []
     @Published var model3_cards: Array<Int> = []
+    private let soundPlayer: SoundPlayer
     var model1: MindModel?
     var model2: MindModel?
     var model3: MindModel?
     var previous_time = Date.now;
     var model_timer: Timer?
+    let card_sounds: Array<String> = ["card_played", "card_played2"]
+    let wrong_answers: Array<String> = ["wrong2"]
     
-    init() {
+    @Published var err1 = 0
+    @Published var err2 = 0
+    @Published var err3 = 0
+    @Published var err4 = 0
+    
+    init(soundPlayer: SoundPlayer, n_players: Int) {
+        number_of_players = n_players
+        life_counter = 1 + 2 * number_of_players
+        self.soundPlayer = soundPlayer
         var players = (1...number_of_players).map{"Player \($0)"}
         let cards = Array(1...100).shuffled()
         var init_delta_card: Double = 0.0
@@ -56,18 +90,26 @@ class MindViewModel: ObservableObject {
         DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [self] in
             // Put your code which should be executed with a delay here
             let (init_fastest_model, init_fastest_timing) = memory_game_logic(number_of_players: number_of_players, delta_card: init_delta_card, delta_timer: 0, first_memory: true)
-            self.model_timer = Timer.scheduledTimer(withTimeInterval: init_fastest_timing, repeats: false) {_ in
-                self.play_card(player: init_fastest_model)
+            self.model_timer = Timer.scheduledTimer(withTimeInterval: init_fastest_timing, repeats: false) { [weak self] timer in
+                guard let strongSelf = self else {
+                    return
+                }
+                
+                strongSelf.play_card(player: init_fastest_model)
             }
+
         }
         
     }
     
     func play_card(player: String) {
+        if life_counter == 0 {
+            exit(0)
+        }
         let prev_card = cards_pile.last
         var played_card: Int = 0
-        var current_time = Date.now
-        var delta_timer = self.previous_time.distance(to: current_time)
+        let current_time = Date.now
+        let delta_timer = self.previous_time.distance(to: current_time)
         print("delta_timer is \(delta_timer)")
         self.previous_time = current_time
         
@@ -87,23 +129,26 @@ class MindViewModel: ObservableObject {
         
         switch(player){
         case "Player 1":
-            if model_timer != nil {
-                model_timer!.invalidate()
-            }
+            model_timer?.invalidate()
+            model_timer = nil
             played_card = player_cards.removeFirst()
             cards_pile.append(played_card)
+            soundPlayer.playSound(sounds: card_sounds)
         case "Player 2":
             played_card = model1_cards.removeFirst()
             cards_pile.append(played_card)
+            soundPlayer.playSound(sounds: card_sounds)
             model1!.play_card()
             //let _ = print(cards_pile[200])
         case "Player 3":
             played_card = model2_cards.removeFirst()
             cards_pile.append(played_card)
+            soundPlayer.playSound(sounds: card_sounds)
             model2!.play_card()
         case "Player 4":
             played_card = model3_cards.removeFirst()
             cards_pile.append(played_card)
+            soundPlayer.playSound(sounds: card_sounds)
             model3!.play_card()
         default: let _ = print("Error!")
         }
@@ -113,7 +158,6 @@ class MindViewModel: ObservableObject {
         print("The last card in the pile is \(prev_card ?? 999)")
         print("Player 1 has these cards: \(player_cards)")
         print("Player 2 has these cards: \(model1!.card_arr ?? [646])")
-        print("Player 3 has these cards: \(model2!.card_arr ?? [646])")
         
         
         let current_card = played_card
@@ -129,7 +173,10 @@ class MindViewModel: ObservableObject {
         if number_of_players >= 4 {
             lower_cards4 = model3_cards.enumerated().compactMap {$1 < played_card ? $1 : nil}
         }
+        
         if !(lower_cards1.isEmpty && lower_cards2.isEmpty && lower_cards3.isEmpty && lower_cards4.isEmpty) {
+            soundPlayer.playSound(sounds: wrong_answers)
+            sleep(1)
             // TODO: filtering returns indices of wrong elements, not the wrong elements themselves.
             // TODO: running .filter() removes EVERYTHING from both models.
             print("Someone played the wrong card!")
@@ -145,6 +192,7 @@ class MindViewModel: ObservableObject {
                     player_cards = player_cards.filter{!lower_cards1.contains($0)}
                     model1_cards = model1_cards.filter{!lower_cards2.contains($0)}
                     model1!.filter_hand(cards_to_filter: lower_cards2)
+                    
                     
                     print("Player 1 cards after filtering: \(player_cards)")
                     print("Player 2 cards after filtering: \(model1_cards)")
@@ -162,13 +210,17 @@ class MindViewModel: ObservableObject {
                     model3!.filter_hand(cards_to_filter: lower_cards4)
                 }
             }
+            
             else {
                 // say game over.
                 // TODO: define what is 'Game Over'.
                 print("Game over, you ran out lives!")
                 isGameOver = true
-                if let check = model_timer {
-                    model_timer!.invalidate()
+                print("GG")
+                if model_timer != nil {
+                    model_timer?.invalidate()
+                    model_timer = nil
+                    exit(0)
                 }
             }
         }
@@ -182,6 +234,9 @@ class MindViewModel: ObservableObject {
             print("Everyone emptied their hands, on to next level!")
             // newLevel()
             if (level < 16 - number_of_players*2) {
+                if(level % 2 == 0) {
+                    life_counter += 1
+                }
                 level += 1
                 cards_pile = [0]
                 let cards = Array(1...100).shuffled()
@@ -202,23 +257,36 @@ class MindViewModel: ObservableObject {
                 (fastest_model, fastest_timing) = memory_game_logic(number_of_players: number_of_players, delta_card: delta_card, delta_timer: delta_timer, first_memory: true)
                 print("New round, first move. The time to wait is \(fastest_timing) seconds!")
                 print("This will be done by the \(fastest_model)")
-                model_timer = Timer.scheduledTimer(withTimeInterval: fastest_timing, repeats: false) {_ in
-                    self.play_card(player: fastest_model)
+                self.model_timer = Timer.scheduledTimer(withTimeInterval: fastest_timing, repeats: false) { [weak self] timer in
+                    guard let strongSelf = self else {
+                        return
+                    }
+                    
+                    strongSelf.play_card(player: fastest_model)
                 }
+
             }
             else {
                 print("You finished the game!")
                 isGameComplete = true
+                if model_timer != nil {
+                    model_timer?.invalidate()
+                    model_timer = nil
+                    exit(0)
+                }
             }
         }
         else if (!model1_cards.isEmpty || !model2_cards.isEmpty || !model3_cards.isEmpty) {
             print("The time to wait is \(fastest_timing) seconds!")
             print("This will be done by the \(fastest_model)")
-            model_timer = Timer.scheduledTimer(withTimeInterval: fastest_timing, repeats: false) {_ in
-                self.play_card(player: fastest_model)
+            self.model_timer = Timer.scheduledTimer(withTimeInterval: fastest_timing, repeats: false) { [weak self] timer in
+                guard let strongSelf = self else {
+                    return
+                }
+                
+                strongSelf.play_card(player: fastest_model)
             }
-        }
-        
+        }        
     }
     
     func memory_game_logic(number_of_players: Int, delta_card: Double, delta_timer: Double, first_memory: Bool) -> (String, Double) {
@@ -234,12 +302,12 @@ class MindViewModel: ObservableObject {
             if (result1 != nil) {
                // print("Good! Latency is \(latency1), chunk is \(result1)")
                 print("The blended time is \(Double(result1!.slotvals["timing"]!.number() ?? 99))")
-                m1_timing = Double(result1!.slotvals["timing"]!.number() ?? Double.random(in: 0..<0.25)*delta_card)
+                m1_timing = pulsesToTime(Int(result1!.slotvals["timing"]!.number() ?? Double.random(in: 10..<31)))
             }
             else {
 //                print("Chunk retrieved was nil!")
 //                print("Latency is \(latency1)")
-                m1_timing = Double.random(in: 0..<0.25)*delta_card
+                m1_timing = pulsesToTime(Int.random(in: 10..<31))
             }
             
             if !(model1_cards.isEmpty) {
@@ -254,10 +322,10 @@ class MindViewModel: ObservableObject {
             let (latency2, result2) = model2!.add_request_memory(delta_timer: delta_timer, delta_card: delta_card, first_memory: false)
             
             if (result2 != nil) {
-                m2_timing = Double(result2!.slotvals["timing"]!.number() ?? Double.random(in: 0..<0.25)*delta_card)
+                m2_timing = pulsesToTime(Int(result2!.slotvals["timing"]!.number() ?? Double.random(in: 10..<31)))
             }
             else {
-                m2_timing = Double.random(in: 0..<0.25)*delta_card
+                m2_timing = pulsesToTime(Int.random(in: 10..<31))
             }
             
             if m2_timing + latency2 < fastest_timing && !(model2_cards.isEmpty) {
@@ -270,10 +338,10 @@ class MindViewModel: ObservableObject {
             let (latency3, result3) = model3!.add_request_memory(delta_timer: delta_timer, delta_card: delta_card, first_memory: false)
             
             if (result3 != nil) {
-                m3_timing = Double(result3!.slotvals["timing"]!.number() ?? Double.random(in: 0..<0.25)*delta_card)
+                m3_timing = pulsesToTime(Int(result3!.slotvals["timing"]!.number() ?? Double.random(in: 10..<31)))
             }
             else {
-                m3_timing = Double.random(in: 0..<0.25)*delta_card
+                m3_timing = pulsesToTime(Int.random(in: 10..<31))
             }
             
             if m3_timing + latency3 < fastest_timing && !(model3_cards.isEmpty) {
@@ -285,5 +353,24 @@ class MindViewModel: ObservableObject {
             print("First move of the round! The fastest model is \(fastest_model), their time before playing is \(fastest_timing)")
         }
         return (fastest_model, fastest_timing)
+    }
+    
+    func noise(_ s: Double) -> Double {
+        let rand = Double.random(in: 0.001..<0.999)
+        return s * log((1 - rand) / rand)
+    }
+    
+    func pulsesToTime(_ pulses: Int, t_0: Double = 0.011, a: Double = 1.1, b: Double = 0.015, addNoise: Bool = true) -> Double {
+        var time = 0.0
+        var pulseDuration = t_0
+        
+        var pulsesLeft = pulses
+        while pulsesLeft > 0 {
+            time += pulseDuration
+            pulsesLeft -= 1
+            pulseDuration = a * pulseDuration + (addNoise ? noise(b * a * pulseDuration) : 0)
+        }
+        
+        return time
     }
 }
