@@ -1,4 +1,2 @@
-# CM-Swift
-Project for Cognitive Modelling: Complex Behaviour
-
-**GOAL FOR TUESDAY**: User interface. Each team will present a sketch of their user interface. Focus not just on what it looks like, but also how the user can interact with it, and how animations can support it.
+# A Swift App: The Mind (ACT-R-based Cognitive Models)
+Project for Cognitive Modelling: Complex Behaviour by Group 1 that implements the board game "The Mind".
